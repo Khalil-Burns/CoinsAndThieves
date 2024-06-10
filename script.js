@@ -39,7 +39,8 @@ function reset() {
     prevTime = null;
 
     for (let i = 0; i < numOfThieves; i++) {
-        let pos = Math.floor(Math.random() * numOfCells + 1);
+        // let pos = Math.floor(Math.random() * numOfCells + 1);
+        let pos = Math.floor(Math.random() * rows) * columns + Math.floor(Math.random() * columns + 1)
         if (thiefPos.has(pos)) {
             i--;
             continue;
@@ -118,7 +119,7 @@ function reset() {
                         tempUnderCell.style.zIndex = '3';
                     }
                     fadeOut(event.target.id)
-                    quit();
+                    end();
                     // for (let k of thiefPos) {
                     // for (let k = 1; k <= numOfCells; k++) {
                     //     if (k == Number(event.target.id)) {
@@ -149,7 +150,7 @@ function reset() {
         }
     }
 }
-function quit() {
+function end() {
     if (gameOver) {
         return;
     }
