@@ -13,9 +13,49 @@
     <title>Coins And Thieves</title>
 </head>
 <body>
+    <div id="modal" class="modal">
+        <div id="game-end-content" class="modal-content">
+            <div class="modal-header">
+                <h2>Game Over!</h2>
+            </div>
+            <div class="modal-body">
+                <span>
+                    You Won:   
+                    <span id="numOfCoins">
+                        <img src="images/coin.gif" style="height: 2em;">
+                    </span>
+                </span>
+
+                <img src="images/coin.gif" style="height: 2em;">
+            </div>
+            <br>
+            <div class="modal-footer">
+                <button onclick="reset()" style="display: flex; justify-content: center; align-items: center;">Play Again (<span style="color: red;">-5</span> <img src="images/coin.gif" style="height: 2em;">)</button>
+                <button onclick="hideModal()" style="margin-left: 20px; padding: calc(8.5px + 0.5em);">No</button>
+            </div>
+        </div>
+        <div id="confirm-reset-modal" class="modal-content">
+            <div class="modal-header">
+                <h2>Reset?</h2>
+            </div>
+            <div class="modal-body">
+                <span">Are you sure you want to reset?</span>
+            </div>
+            <br>
+            <div class="modal-footer">
+                <button onclick="reset()" style="display: flex; justify-content: center; align-items: center;">Yes (<span style="color: red;">-5</span> <img src="images/coin.gif" style="height: 2em;">)</button>
+                <button onclick="hideModal()" style="margin-left: 20px; padding: calc(8.5px + 0.5em);">No</button>
+            </div>
+        </div>
+    </div>
+    <div id="balance" style="position: absolute; top: 1em; left: 1em;">
+        Your Balance: 
+        <span id="coinBalance">10</span>
+        <img src="images/coin.gif" style="height: 2em; position: relative; top: 9px;">
+    </div>
     <div id="game-container" class="grid-container"></div>
     <div id="buttons-container" style="position: relative; left: 20px; display: inline-grid;">
-        <button onclick="reset()">Reset <i class="fa fa-refresh"></i></button>
+        <button onclick="showConfirmResetModal()">Reset <i class="fa fa-refresh"></i></button>
         <button onclick="end()">End <i class="fa fa-sign-out"></i></button>
     </div>
 </body>

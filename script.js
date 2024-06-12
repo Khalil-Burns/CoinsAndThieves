@@ -1,5 +1,5 @@
 let numOfCells = 25;
-let numOfThieves = 4;
+let numOfThieves = 3;
 let thiefPos;
 let rows = 5;
 let columns = 5;
@@ -11,11 +11,25 @@ let gameOver;
 let openedCells;
 let fading;
 let prevTime;
+let modal;
+let gameEndModal;
+let confirmResetModal;
+let coinCount;
+let coinCountDisplay;
+let coinBalance = 30;
+let coinBalanceDisplay;
 
 window.onload = function() {
     gridContainer = document.getElementById('game-container');
     gridContainer.style.width = `${rows * 100}px`;
     gridContainer.style.height = `${columns * 100}px`
+
+    modal = document.getElementById('modal');
+    gameEndModal = document.getElementById('game-end-content');
+    confirmResetModal = document.getElementById('confirm-reset-modal');
+
+    coinCountDisplay = document.getElementById('numOfCoins');
+    coinBalanceDisplay = document.getElementById('coinBalance');
 
     reset();
 
@@ -23,6 +37,8 @@ window.onload = function() {
 }
 
 function reset() {
+
+    coinBalance -= 5;
     
     let cell;
     let underCell;
@@ -30,12 +46,17 @@ function reset() {
     let cellContainer;
 
     gridContainer.innerHTML = '';
+
+    hideModal();
+    coinBalanceDisplay.innerHTML = `  ${coinBalance}`;
+
     gameOver = false;
+    coinCount = 0;
     openedCells = new Set([]);
     fallingCells = new Set([]);
     thiefPos = new Set([]);
 
-    fading = false;
+    fading = 0;
     prevTime = null;
 
     for (let i = 0; i < numOfThieves; i++) {
@@ -119,6 +140,7 @@ function reset() {
                         tempUnderCell.style.zIndex = '3';
                     }
                     fadeOut(event.target.id)
+                    coinCount = 0;
                     end();
                     // for (let k of thiefPos) {
                     // for (let k = 1; k <= numOfCells; k++) {
@@ -133,6 +155,9 @@ function reset() {
                     //     // tempUnderCell.speedAngular = Math.random() * 16 - 8;
                     //     // tempUnderCell.style.zIndex = '3';
                     // }
+                }
+                else {
+                    coinCount++;
                 }
                 openedCells.add(Number(event.target.id) + numOfCells);
                 fallingCells.add(event.target.id);
@@ -150,12 +175,22 @@ function reset() {
         }
     }
 }
+function hideModal() {
+    modal.style.display = 'none';
+    gameEndModal.style.display = 'none';
+    confirmResetModal.style.display = 'none';
+}
+function showConfirmResetModal() {
+    hideModal();
+    modal.style.display = 'block';
+    confirmResetModal.style.display = 'block';
+}
 function end() {
     if (gameOver) {
         return;
     }
     gameOver = true;
-    fading = true;
+    fading = 1;
     prevTime = new Date().getTime();
     fadeOut();
 }
@@ -176,10 +211,10 @@ function loop() {
         fall(idx);
     }
 
-    if (fading) {
+    if (fading == 1) {
         let curTime = new Date().getTime()
-        if (curTime - prevTime >= 2000) {
-            fading = false;
+        if (curTime - prevTime >= 1000) {
+            fading = 2;
             for (let i = numOfCells + 1; i <= 2 * numOfCells; i++) {
                 if (openedCells.has(i)) {
                     continue;
@@ -194,6 +229,18 @@ function loop() {
                 tempUnderCell.speedAngular = Math.random() * 16 - 8;
                 tempUnderCell.style.zIndex = '3';
             }
+        }
+    }
+    else if (fading == 2) {
+        let curTime = new Date().getTime()
+        if (curTime - prevTime >= 2000) {
+            hideModal();
+            modal.style.display = 'block';
+            gameEndModal.style.display = 'block';
+
+            coinCountDisplay.innerHTML = coinCount;
+            coinBalance += coinCount;
+            fading = 0;
         }
     }
 }
