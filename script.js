@@ -18,6 +18,11 @@ let coinCount;
 let coinCountDisplay;
 let coinBalance = 30;
 let coinBalanceDisplay;
+let numOfThievesDisplay;
+let gameCost = 4;
+let coinSpillAudio;
+let coinPickupAudio;
+let gameOverAudio;
 
 window.onload = function() {
     gridContainer = document.getElementById('game-container');
@@ -30,6 +35,11 @@ window.onload = function() {
 
     coinCountDisplay = document.getElementById('numOfCoins');
     coinBalanceDisplay = document.getElementById('coinBalance');
+    numOfThievesDisplay = document.getElementById('thieveNum');
+
+    coinPickupAudio = new Audio('sounds/coinPickup.mp3');
+    coinSpillAudio = new Audio('sounds/coinSpill.mp3');
+    gameOverAudio = new Audio('sounds/gameOver.wav');
 
     reset();
 
@@ -38,7 +48,7 @@ window.onload = function() {
 
 function reset() {
 
-    coinBalance -= 5;
+    coinBalance -= gameCost;
     
     let cell;
     let underCell;
@@ -55,6 +65,9 @@ function reset() {
     openedCells = new Set([]);
     fallingCells = new Set([]);
     thiefPos = new Set([]);
+
+    numOfThieves = Math.floor(Math.random() * 6 + 1);
+    numOfThievesDisplay.innerHTML = numOfThieves;
 
     fading = 0;
     prevTime = null;
@@ -87,7 +100,7 @@ function reset() {
             else {
                 cell.thief = false;
             }
-            // underCell.innerHTML = `<img src="images/${cell.thief?'thief.png':'coin.gif'}" style="width: 100%; height: 100%;">`
+            
             underCellImage.src = `images/${cell.thief?'thief.png':'coin.gif'}`;
             underCellImage.style.width = '100%';
             underCellImage.style.height = '100%';
@@ -131,6 +144,7 @@ function reset() {
                 }
                 if (event.target.thief) {
                     // gameOver = true;
+                    gameOverAudio.play();
                     for (let k of openedCells) {
                         fallingCells.add(`${k}`)
                         let tempUnderCell = document.getElementById(k);
@@ -142,22 +156,12 @@ function reset() {
                     fadeOut(event.target.id)
                     coinCount = 0;
                     end();
-                    // for (let k of thiefPos) {
-                    // for (let k = 1; k <= numOfCells; k++) {
-                    //     if (k == Number(event.target.id)) {
-                    //         continue;
-                    //     }
-                    //     // fallingCells.add(`${k}`)
-                    //     let tempUnderCell = document.getElementById(k);
-                    //     tempUnderCell.classList.add('fade-out')
-                    //     // // tempUnderCell.speedX = Math.random() * 8 - 4;
-                    //     // // tempUnderCell.speedY = Math.random() * -8 - 8;
-                    //     // tempUnderCell.speedAngular = Math.random() * 16 - 8;
-                    //     // tempUnderCell.style.zIndex = '3';
-                    // }
                 }
                 else {
                     coinCount++;
+                    stopAudio();
+                    
+                    coinPickupAudio.play();
                 }
                 openedCells.add(Number(event.target.id) + numOfCells);
                 fallingCells.add(event.target.id);
@@ -215,6 +219,8 @@ function loop() {
         let curTime = new Date().getTime()
         if (curTime - prevTime >= 1000) {
             fading = 2;
+            stopAudio();
+            coinSpillAudio.play();
             for (let i = numOfCells + 1; i <= 2 * numOfCells; i++) {
                 if (openedCells.has(i)) {
                     continue;
@@ -261,4 +267,13 @@ function fall(idx) {
     cell.style.top = `${cell.posY}px`;
     cell.style.left = `${cell.posX}px`;
     cell.style.transform = `rotate(${cell.rotation}deg)`;
+}
+
+function stopAudio() {
+    coinSpillAudio.pause();
+    coinPickupAudio.pause();
+    gameOverAudio.pause();
+    coinSpillAudio.currentTime = 0;
+    coinPickupAudio.currentTime = 0;
+    gameOverAudio.currentTime = 0;
 }

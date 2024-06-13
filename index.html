@@ -30,7 +30,7 @@
             </div>
             <br>
             <div class="modal-footer">
-                <button onclick="reset()" style="display: flex; justify-content: center; align-items: center;">Play Again (<span style="color: red;">-5</span> <img src="images/coin.gif" style="height: 2em;">)</button>
+                <button onclick="reset()" style="display: flex; justify-content: center; align-items: center;">Play Again (<span style="color: red;">-4</span> <img src="images/coin.gif" style="height: 2em;">)</button>
                 <button onclick="hideModal()" style="margin-left: 20px; padding: calc(8.5px + 0.5em);">No</button>
             </div>
         </div>
@@ -43,15 +43,20 @@
             </div>
             <br>
             <div class="modal-footer">
-                <button onclick="reset()" style="display: flex; justify-content: center; align-items: center;">Yes (<span style="color: red;">-5</span> <img src="images/coin.gif" style="height: 2em;">)</button>
+                <button onclick="reset()" style="display: flex; justify-content: center; align-items: center;">Yes (<span style="color: red;">-4</span> <img src="images/coin.gif" style="height: 2em;">)</button>
                 <button onclick="hideModal()" style="margin-left: 20px; padding: calc(8.5px + 0.5em);">No</button>
             </div>
         </div>
     </div>
     <div id="balance" style="position: absolute; top: 1em; left: 1em;">
         Your Balance: 
-        <span id="coinBalance">10</span>
+        <span id="coinBalance"></span>
         <img src="images/coin.gif" style="height: 2em; position: relative; top: 9px;">
+    </div>
+    <div id="numOfThieves" style="position: absolute; top: 3em; left: 1em;">
+        # of thieves (random): 
+        <span id="thieveNum"></span>
+        <img src="images/thief.png" style="height: 2em; position: relative; top: 9px;">
     </div>
     <div id="game-container" class="grid-container"></div>
     <div id="buttons-container" style="position: relative; left: 20px; display: inline-grid;">
