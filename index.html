@@ -58,9 +58,13 @@
         <span id="thieveNum"></span>
         <img src="images/thief.png" style="height: 2em; position: relative; top: 9px;">
     </div>
+    <div id="clicksLeft" style="position: absolute; top: 6em; left: 1em;">
+        Clicks left: 
+        <span id="clickNum"></span>
+    </div>
     <div id="game-container" class="grid-container"></div>
     <div id="buttons-container" style="position: relative; left: 20px; display: inline-grid;">
         <button onclick="showConfirmResetModal()">Reset <i class="fa fa-refresh"></i></button>
-        <button onclick="end()">End <i class="fa fa-sign-out"></i></button>
+        <button onclick="win()">End <i class="fa fa-sign-out"></i></button>
     </div>
 </body>

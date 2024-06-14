@@ -23,6 +23,7 @@ let gameCost = 4;
 let coinSpillAudio;
 let coinPickupAudio;
 let gameOverAudio;
+let gameWinAudio;
 
 window.onload = function() {
     gridContainer = document.getElementById('game-container');
@@ -40,6 +41,7 @@ window.onload = function() {
     coinPickupAudio = new Audio('sounds/coinPickup.mp3');
     coinSpillAudio = new Audio('sounds/coinSpill.mp3');
     gameOverAudio = new Audio('sounds/gameOver.wav');
+    gameWinAudio = new Audio('sounds/gameWin.wav');
 
     reset();
 
@@ -71,6 +73,8 @@ function reset() {
 
     fading = 0;
     prevTime = null;
+
+    stopAudio();
 
     for (let i = 0; i < numOfThieves; i++) {
         // let pos = Math.floor(Math.random() * numOfCells + 1);
@@ -159,8 +163,9 @@ function reset() {
                 }
                 else {
                     coinCount++;
-                    stopAudio();
-                    
+                    // stopAudio();
+                    coinPickupAudio.pause();
+                    coinPickupAudio.currentTime = 0;
                     coinPickupAudio.play();
                 }
                 openedCells.add(Number(event.target.id) + numOfCells);
@@ -188,6 +193,11 @@ function showConfirmResetModal() {
     hideModal();
     modal.style.display = 'block';
     confirmResetModal.style.display = 'block';
+}
+function win() {
+    // stopAudio();
+    gameWinAudio.play();
+    end();
 }
 function end() {
     if (gameOver) {
@@ -219,7 +229,7 @@ function loop() {
         let curTime = new Date().getTime()
         if (curTime - prevTime >= 1000) {
             fading = 2;
-            stopAudio();
+            // stopAudio();
             coinSpillAudio.play();
             for (let i = numOfCells + 1; i <= 2 * numOfCells; i++) {
                 if (openedCells.has(i)) {
@@ -273,7 +283,9 @@ function stopAudio() {
     coinSpillAudio.pause();
     coinPickupAudio.pause();
     gameOverAudio.pause();
+    gameWinAudio.pause();
     coinSpillAudio.currentTime = 0;
     coinPickupAudio.currentTime = 0;
     gameOverAudio.currentTime = 0;
+    gameWinAudio.currentTime = 0;
 }
