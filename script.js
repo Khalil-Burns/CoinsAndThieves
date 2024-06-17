@@ -26,6 +26,7 @@ let gameOverAudio;
 let gameWinAudio;
 let clicksLeft;
 let clicksLeftDisplay;
+let isWin;
 
 window.onload = function() {
     gridContainer = document.getElementById('game-container');
@@ -77,6 +78,8 @@ function reset() {
 
     fading = 0;
     prevTime = null;
+
+    isWin = true;
 
     stopAudio();
 
@@ -152,6 +155,7 @@ function reset() {
                 }
                 clicksLeft--;
                 if (event.target.thief) {
+                    isWin = false;
                     // gameOver = true;
                     gameOverAudio.play();
                     for (let k of openedCells) {
@@ -202,6 +206,7 @@ function showConfirmResetModal() {
 function win() {
     // stopAudio();
     gameWinAudio.play();
+    isWin = false;
     end();
 }
 function end() {
@@ -229,7 +234,7 @@ function loop() {
     coinBalanceDisplay.innerHTML = `  ${coinBalance}`;
     clicksLeftDisplay.innerHTML = `  ${clicksLeft}`;
 
-    if (clicksLeft <= 0) {
+    if (clicksLeft <= 0 && isWin) {
         win();
     }
 
