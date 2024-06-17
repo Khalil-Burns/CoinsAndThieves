@@ -24,6 +24,8 @@ let coinSpillAudio;
 let coinPickupAudio;
 let gameOverAudio;
 let gameWinAudio;
+let clicksLeft;
+let clicksLeftDisplay;
 
 window.onload = function() {
     gridContainer = document.getElementById('game-container');
@@ -37,6 +39,7 @@ window.onload = function() {
     coinCountDisplay = document.getElementById('numOfCoins');
     coinBalanceDisplay = document.getElementById('coinBalance');
     numOfThievesDisplay = document.getElementById('thieveNum');
+    clicksLeftDisplay = document.getElementById('clickNum');
 
     coinPickupAudio = new Audio('sounds/coinPickup.mp3');
     coinSpillAudio = new Audio('sounds/coinSpill.mp3');
@@ -51,6 +54,8 @@ window.onload = function() {
 function reset() {
 
     coinBalance -= gameCost;
+
+    clicksLeft = 5;
     
     let cell;
     let underCell;
@@ -60,7 +65,6 @@ function reset() {
     gridContainer.innerHTML = '';
 
     hideModal();
-    coinBalanceDisplay.innerHTML = `  ${coinBalance}`;
 
     gameOver = false;
     coinCount = 0;
@@ -146,6 +150,7 @@ function reset() {
                 if (gameOver) {
                     return;
                 }
+                clicksLeft--;
                 if (event.target.thief) {
                     // gameOver = true;
                     gameOverAudio.play();
@@ -221,6 +226,13 @@ function fadeOut(cell) {
 }
 
 function loop() {
+    coinBalanceDisplay.innerHTML = `  ${coinBalance}`;
+    clicksLeftDisplay.innerHTML = `  ${clicksLeft}`;
+
+    if (clicksLeft <= 0) {
+        win();
+    }
+
     for (let idx of fallingCells) {
         fall(idx);
     }
